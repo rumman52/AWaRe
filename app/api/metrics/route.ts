@@ -4,20 +4,38 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   const metrics = await prisma.metricDaily.findMany({ orderBy: { date: "asc" } });
   const recommendations = await prisma.recommendation.findMany({ include: { case: true }, orderBy: { createdAt: "desc" } });
-
-  const topWatch: Record<string, number> = {};
-  recommendations.forEach((rec) => {
-    const options = JSON.parse(rec.suggestedRegimensJson) as Array<{ antibioticName: string; awareGroup: string }>;
-    options
-      .filter((opt) => opt.awareGroup === "WATCH")
-      .forEach((opt) => {
-        topWatch[opt.antibioticName] = (topWatch[opt.antibioticName] || 0) + 1;
-      });
+  const antibiotics: Array<{ name: string; awareGroup: string }> = await prisma.antibiotic.findMany({
+    select: { name: true, awareGroup: true }
   });
 
-  const reviewOverdue = recommendations
-    .filter((rec) => new Date(rec.reviewDueAt).getTime() < Date.now())
-    .map((rec) => ({ caseId: rec.caseId, reviewDueAt: rec.reviewDueAt, infection: rec.case.suspectedInfectionKey }));
+  const awareByAntibiotic = new Map<string, string>();
+  for (const antibiotic of antibiotics) {
+    awareByAntibiotic.set(antibiotic.name, antibiotic.awareGroup);
+  }
+
+  const topWatch: Record<string, number> = {};
+  for (const recommendation of recommendations) {
+    const selectedAntibiotic = recommendation.case.chosenAntibiotic;
+
+    if (!selectedAntibiotic) {
+      continue;
+    }
+
+    if (awareByAntibiotic.get(selectedAntibiotic) === "WATCH") {
+      topWatch[selectedAntibiotic] = (topWatch[selectedAntibiotic] || 0) + 1;
+    }
+  }
+
+  const reviewOverdue: Array<{ caseId: string; reviewDueAt: Date; infection: string }> = [];
+  for (const recommendation of recommendations) {
+    if (new Date(recommendation.reviewDueAt).getTime() < Date.now()) {
+      reviewOverdue.push({
+        caseId: recommendation.caseId,
+        reviewDueAt: recommendation.reviewDueAt,
+        infection: recommendation.case.suspectedInfectionKey
+      });
+    }
+  }
 
   return NextResponse.json({
     metrics,
