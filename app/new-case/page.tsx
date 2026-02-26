@@ -15,7 +15,7 @@ const infections = [
 export default function NewCasePage() {
   const router = useRouter();
   const [form, setForm] = useState({
-    setting: "hospital",
+    setting: "primary_care",
     suspectedInfectionKey: "uti_uncomplicated",
     severity: "uncomplicated",
     age: 42,
