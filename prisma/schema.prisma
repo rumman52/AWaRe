@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum AwareGroup {
+  ACCESS
+  WATCH
+  RESERVE
+}
+
+enum Setting {
+  primary_care
+  hospital
+}
+
+model Antibiotic {
+  id                  String     @id @default(cuid())
+  name                String     @unique
+  awareGroup          AwareGroup
+  adultDoseText       String
+  renalAdjustmentText String
+  notes               String
+  sourceUrl           String
+}
+
+model InfectionGuide {
+  id                     String   @id @default(cuid())
+  infectionKey           String
+  setting                Setting
+  recommendedOptionsJson String
+  durationRulesJson      String
+  redFlagsJson           String
+  sourceUrl              String
+
+  @@unique([infectionKey, setting])
+}
+
+model Case {
+  id                    String           @id @default(cuid())
+  createdAt             DateTime         @default(now())
+  age                   Int
+  sex                   String
+  pregnancy             Boolean
+  allergiesText         String
+  creatinineOrEgfr      String
+  setting               String
+  suspectedInfectionKey String
+  severity              String
+  symptomsText          String
+  chosenAntibiotic      String?
+  chosenDose            String?
+  chosenDurationDays    Int?
+  justificationText     String
+  recommendations       Recommendation[]
+  auditLogs             AuditLog[]
+}
+
+model Recommendation {
+  id                  String   @id @default(cuid())
+  caseId               String
+  createdAt            DateTime @default(now())
+  summaryText          String
+  suggestedRegimensJson String
+  awareWarningsJson    String
+  durationWarningJson  String
+  reviewDueAt          DateTime
+  evidenceLinksJson    String
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  caseId     String
+  actionType String
+  detailJson String
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+}
+
+model MetricDaily {
+  id          String   @id @default(cuid())
+  date        DateTime @unique
+  accessCount Int
+  watchCount  Int
+  reserveCount Int
+  totalCount  Int
+}
