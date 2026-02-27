@@ -1,37 +1,35 @@
 # AMR Steward Messaging Pack
 
-## A) Problem + Solution (Hackathon Application, 150–200 words)
-Antimicrobial resistance (AMR) is a major global health threat, and WHO highlights misuse and overuse of antimicrobials as key drivers. AMR Steward addresses this at the point of care with practical, guideline-based decision support and a built-in stewardship workflow. Our app turns WHO AWaRe guidance into action: for common infections (UTI, community-acquired pneumonia, and skin/soft-tissue infection), it provides 2–3 empiric options with dose, route, and duration based on the WHO AWaRe Antibiotic Book. Every antibiotic is labeled Access, Watch, or Reserve so teams can avoid unnecessary broad-spectrum use. If a Watch or Reserve option is selected without clear justification, the app warns the user and suggests Access alternatives when appropriate. It also operationalizes a core stewardship process from CDC guidance: a 48–72 hour review checkpoint with reminders and structured suggestions to de-escalate, stop, or switch once new information is available. At system level, the dashboard tracks Access vs Watch/Reserve use, progress toward the WHO ≥70% Access indicator, overdue reviews, and top Watch use to support safer care, lower resistance pressure, and better resource use.
+## A) How our solution solves the AMR problem (150–200 words)
+Antimicrobial resistance is growing because antibiotics are often used when they are not needed, or used in the wrong way. AMR Steward turns WHO AWaRe stewardship guidance into daily decision support in one simple workflow. A clinician starts with a structured case intake form (care setting, infection type, severity, age, sex, pregnancy, allergies, kidney function, and notes). The recommendation engine then uses AWaRe Antibiotic Book rules to suggest 2–3 empiric options for common infections such as UTI, pneumonia, and skin/soft tissue infection, including dose, route, and duration. Each option is clearly labeled Access, Watch, or Reserve. If Watch or Reserve is selected without justification, the app warns the user and offers Access alternatives when appropriate. AMR Steward also adds the critical 48–72 hour review step by creating a review reminder and proposing de-escalate, stop, or switch actions when new information is available, with clinician confirmation required. A stewardship dashboard tracks Access/Watch/Reserve use, progress toward the WHO ≥70% Access goal, top Watch use, and overdue reviews. AI is used for summarization and explanation, not autonomous prescribing.
 
 ## B) Exactly what we solve
-- **Wrong antibiotic choice at start:** We provide infection-specific empiric options linked to AWaRe guidance, so clinicians begin from recommended choices.
-- **Overuse of broad antibiotics:** We label every drug as Access/Watch/Reserve, flag unneeded Watch/Reserve use, and suggest Access alternatives when suitable.
-- **Wrong duration, route, or dose:** We show structured dose/route/duration guidance to reduce avoidable variation.
-- **Missed 48–72 hour review:** We generate “review due” reminders and an overdue queue so reassessment becomes routine.
-- **Lack of tracking and accountability:** We provide a stewardship dashboard with Access %, Watch/Reserve use, overdue reviews, and top Watch antibiotics.
-- **Inconsistent guideline adherence across teams:** We standardize decision support and rationale display so stewardship practice is more consistent shift-to-shift.
+- **Wrong antibiotic choice:** We provide infection-specific empiric decision support aligned to WHO AWaRe guidance.
+- **Overuse of broad-spectrum agents:** We label Access/Watch/Reserve and flag Watch/Reserve use without clear justification.
+- **Wrong duration:** We show guideline-aligned duration (with dose and route context) to reduce unnecessary exposure.
+- **Missed 48–72 hour review:** We create review-due reminders and an overdue list so reassessment is not skipped.
+- **Lack of tracking:** We provide a stewardship dashboard with AWaRe mix, top Watch use, and overdue reviews.
+- **Inconsistent guideline adherence:** We standardize decisions and explanations across teams and shifts.
 
-## C) How AI is used safely
-AMR Steward uses AI for **decision support only**.
-- **Human in the loop:** The clinician must confirm all recommendations and final treatment decisions.
-- **Source-linked guidance:** Suggestions are tied to AWaRe-based rules and transparent rationale, not black-box outputs.
-- **No autonomous prescribing:** The system does not prescribe, place orders, or replace clinical judgment.
-- **Safety note:** This tool supports stewardship workflow and should be used with local policy, microbiology data, and clinician assessment.
+## C) Why this works internationally
+- It is built on WHO AWaRe guidance, which is globally recognized and adaptable to local formularies.
+- The workflow is simple and low-friction, so it can fit different hospital sizes and resource levels.
+- It supports local clinical judgment while standardizing stewardship steps that are universal.
 
-## D) Metrics to measure impact
-- Increase in **% Access antibiotic use** and progress toward the WHO ≥70% Access benchmark.
-- Reduction in **Watch/Reserve starts without documented criteria**.
-- Reduction in **inappropriate antibiotic-days** (choice, route, or duration not aligned with guidance).
-- Improvement in **48–72 hour review completion rate** and reduction in review overdue cases.
-- Increase in **de-escalation/stop/switch actions** after review when clinically appropriate.
-- Reduced variation in prescribing patterns across departments/teams.
-- Operational gains: less time spent on manual audit preparation and clearer stewardship reporting.
+## D) How we measure impact
+- **Access %:** Increase in Access share, with progress toward the WHO ≥70% Access benchmark.
+- **Watch/Reserve reduction:** Fewer Watch/Reserve starts, especially without documented justification.
+- **Inappropriate antibiotic-days:** Reduction in days that are off-guideline for choice, dose, route, or duration.
+- **Review compliance:** Higher 48–72 hour review completion and fewer overdue reviews.
+- **Guideline adherence:** Higher alignment of empiric decisions with AWaRe-based recommendations.
 
 ## E) 45–60 second demo day pitch script
-"AMR is one of the world’s biggest health threats, and overuse of antibiotics is a key driver. AMR Steward helps hospitals turn stewardship guidance into everyday clinical practice. For common infections like UTI, pneumonia, and skin infections, we provide AWaRe-based empiric options with dose, route, and duration. We clearly label every antibiotic as Access, Watch, or Reserve, and if broad-spectrum choices are used without clear reason, we prompt safer Access alternatives when appropriate. We also add the stewardship step that often gets missed: a 48–72 hour review reminder with structured de-escalate, stop, or switch suggestions once new results come in. At leadership level, our dashboard tracks Access percentage, progress toward the WHO 70% Access goal, overdue reviews, and top Watch use. The AI is decision support only—clinicians stay in control. The result is safer care, less resistance pressure, and better use of hospital time and cost."
+"AMR is rising because antibiotics are often overused or used too broadly. AMR Steward helps clinical teams apply WHO AWaRe stewardship guidance at the point of care. First, teams enter a structured case. Then our engine gives 2 to 3 empiric options for UTI, pneumonia, and skin infections, with dose, route, and duration. Every option is labeled Access, Watch, or Reserve, and we warn on Watch or Reserve use without justification while suggesting Access alternatives when appropriate. We also solve the step that often gets missed: a 48 to 72 hour review reminder, with de-escalate, stop, or switch suggestions after new data arrives, always confirmed by a human clinician. Leadership gets a dashboard showing Access percentage, progress toward the WHO 70% goal, top Watch use, and overdue reviews. This is practical decision support for safer antibiotic use." 
 
-## Reference links
-- WHO AMR Fact Sheet: https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance
-- WHO AWaRe 70% Access indicator: https://www.who.int/data/gho/indicator-metadata-registry/imr-details/5767
+**Safety disclaimer:** Not medical advice; clinician must confirm.
+
+## References
+- WHO AMR fact sheet: https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance
 - WHO AWaRe Antibiotic Book: https://www.who.int/publications/i/item/9789240062382
-- CDC Core Elements (Hospital Stewardship): https://www.cdc.gov/antibiotic-use/hcp/core-elements/hospital.html
+- WHO AWaRe indicator (≥70% Access): https://www.who.int/data/gho/indicator-metadata-registry/imr-details/5767
+- CDC core elements: https://www.cdc.gov/antibiotic-use/hcp/core-elements/hospital.html
