@@ -7,21 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum AwareGroup {
-  ACCESS
-  WATCH
-  RESERVE
-}
-
-enum Setting {
-  primary_care
-  hospital
-}
-
 model Antibiotic {
   id                  String     @id @default(cuid())
   name                String     @unique
-  awareGroup          AwareGroup
+  awareGroup          String
   adultDoseText       String
   renalAdjustmentText String
   notes               String
@@ -31,7 +20,7 @@ model Antibiotic {
 model InfectionGuide {
   id                     String   @id @default(cuid())
   infectionKey           String
-  setting                Setting
+  setting                String
   recommendedOptionsJson String
   durationRulesJson      String
   redFlagsJson           String
