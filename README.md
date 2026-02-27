@@ -26,10 +26,10 @@ Run these commands **once** after connecting your Vercel project to Postgres.
 
 ### 1) Pull Vercel env vars locally
 ```bash
-vercel env pull .env.local
+vercel env pull .env.production
 ```
 
-This copies the deployed `DATABASE_URL` into `.env.local` so Prisma CLI targets the same database.
+This copies the deployed `DATABASE_URL` into `.env.production` so Prisma CLI targets the same database used in production checks.
 
 ### 2) DATABASE_URL requirements
 Use a managed Postgres URL in Vercel project environment variables.
