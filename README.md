@@ -22,23 +22,30 @@ Open http://localhost:3000/new-case
 
 ## Vercel production setup
 
-### 1) DATABASE_URL requirements
-Use a managed Postgres URL in Vercel project environment variables.
+### 1) Set `DATABASE_URL` in Vercel
 
-Expected format:
-```text
-postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require
-```
+#### Option A (recommended): Vercel Storage Postgres
+1. Open your Vercel project.
+2. Go to **Storage** → **Create Database** → **Postgres**.
+3. Click **Connect Project**.
 
-- Do **not** use SQLite file URLs (`file:./dev.db`) in production on Vercel.
-- Set `DATABASE_URL` in Vercel for **Production**, **Preview**, and optionally **Development** environments.
+This automatically injects `DATABASE_URL` and related Postgres variables for the selected environments.
+
+#### Option B: Manual environment variable
+1. Open your Vercel project.
+2. Go to **Settings** → **Environment Variables**.
+3. Add `DATABASE_URL` using your managed Postgres URL (example: `postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require`).
+4. Apply it to **Production** and **Preview** (and optionally **Development**).
+5. Trigger a **Redeploy** after saving.
+
+> Do **not** use SQLite file URLs (`file:./dev.db`) on Vercel production.
 
 ### 2) Build / Prisma client generation
 This project includes:
 - `postinstall`: `prisma generate`
 - `vercel-build`: `prisma generate && next build`
 
-These ensure Prisma Client is generated in Vercel builds.
+These ensure Prisma Client is generated during Vercel installs/builds.
 
 ### 3) Run schema migrations in production
 Do **not** run `prisma migrate dev` in production.
@@ -59,6 +66,12 @@ npx prisma db seed
 ```
 
 Expected result: baseline antibiotics + infection guides are inserted so `/api/cases` can generate recommendations.
+
+### 5) Runtime + health checks
+- Prisma routes are configured for Node runtime (`export const runtime = "nodejs"`).
+- Use `GET /api/health` for quick diagnostics:
+  - `200` + `{ "ok": true, "status": "OK" }` when DB is reachable.
+  - `500` + clear error JSON when `DATABASE_URL` is missing/invalid or DB is unreachable.
 
 ## Demo script
 1. Go to `/new-case` and submit a UTI uncomplicated case with no selected antibiotic.
