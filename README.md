@@ -32,6 +32,7 @@ postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require
 
 - Do **not** use SQLite file URLs (`file:./dev.db`) in production on Vercel.
 - Set `DATABASE_URL` in Vercel for **Production**, **Preview**, and optionally **Development** environments.
+- The API performs runtime validation and returns a clear JSON error if `DATABASE_URL` is missing or not a `postgres://` / `postgresql://` URL.
 
 ### 2) Build / Prisma client generation
 This project includes:
