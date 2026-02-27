@@ -33,21 +33,26 @@ export default function NewCasePage() {
 
   const submit = async () => {
     setError("");
-    const res = await fetch("/api/cases", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form)
-    });
 
-    if (!res.ok) {
-      const payload = await res.json().catch(() => null);
-      const message = payload?.error || "Failed to generate recommendation.";
-      setError(message);
-      return;
+    try {
+      const res = await fetch("/api/cases", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+
+      if (!res.ok) {
+        const payload = await res.json().catch(() => null);
+        const message = payload?.error || "Failed to generate recommendation.";
+        setError(message);
+        return;
+      }
+
+      const data = await res.json();
+      router.push(`/case/${data.id}`);
+    } catch {
+      setError("Failed to generate recommendation. Please try again.");
     }
-
-    const data = await res.json();
-    router.push(`/case/${data.id}`);
   };
 
   return (

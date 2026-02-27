@@ -22,7 +22,16 @@ Open http://localhost:3000/new-case
 
 ## Vercel production setup
 
-### 1) DATABASE_URL requirements
+Run these commands **once** after connecting your Vercel project to Postgres.
+
+### 1) Pull Vercel env vars locally
+```bash
+vercel env pull .env.local
+```
+
+This copies the deployed `DATABASE_URL` into `.env.local` so Prisma CLI targets the same database.
+
+### 2) DATABASE_URL requirements
 Use a managed Postgres URL in Vercel project environment variables.
 
 Expected format:
@@ -34,33 +43,56 @@ postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require
 - Set `DATABASE_URL` in Vercel for **Production**, **Preview**, and optionally **Development** environments.
 - The API performs runtime validation and returns a clear JSON error if `DATABASE_URL` is missing or not a `postgres://` / `postgresql://` URL.
 
-### 2) Build / Prisma client generation
+### 3) Build / Prisma client generation
 This project includes:
 - `postinstall`: `prisma generate`
 - `vercel-build`: `prisma generate && next build`
 
-These ensure Prisma Client is generated in Vercel builds.
+These ensure Prisma Client is generated in Vercel builds and stays fresh per deployment.
 
-### 3) Run schema migrations in production
+### 4) Run schema migrations in production
 Do **not** run `prisma migrate dev` in production.
 
-After deploying and setting `DATABASE_URL`, run once against production:
+Apply checked-in migrations against the connected Vercel database:
 ```bash
 npx prisma migrate deploy
 ```
 
-Expected result: all checked-in migrations are applied and API routes can query/create records.
-
-### 4) Seed initial recommendation data
+### 5) Seed initial recommendation data
 The recommender requires `InfectionGuide` and `Antibiotic` seed data.
 
-Run (against the intended database):
+Run:
 ```bash
 npx prisma db seed
 ```
 
-Expected result: baseline antibiotics + infection guides are inserted so `/api/cases` can generate recommendations.
+### 6) Verify backend health + recommendation endpoint
+Health check:
+```bash
+curl -s http://localhost:3000/api/health
+```
+Expected response: `{"ok":true,"message":"Database connection is healthy."}`
 
+Recommendation check (should return 200 with JSON containing an `id`):
+```bash
+curl -i -X POST http://localhost:3000/api/cases \
+  -H 'content-type: application/json' \
+  -d '{
+    "setting":"primary_care",
+    "suspectedInfectionKey":"uti_uncomplicated",
+    "severity":"uncomplicated",
+    "age":42,
+    "sex":"female",
+    "pregnancy":false,
+    "allergiesText":"none",
+    "creatinineOrEgfr":"eGFR 90",
+    "symptomsText":"dysuria",
+    "chosenAntibiotic":"",
+    "chosenDose":"",
+    "chosenDurationDays":5,
+    "justificationText":""
+  }'
+```
 ## Demo script
 1. Go to `/new-case` and submit a UTI uncomplicated case with no selected antibiotic.
 2. Create another case selecting **Ceftriaxone** or **Ciprofloxacin** to trigger Watch warning.
