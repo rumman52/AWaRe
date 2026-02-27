@@ -14,6 +14,7 @@ const infections = [
 
 export default function NewCasePage() {
   const router = useRouter();
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     setting: "primary_care",
     suspectedInfectionKey: "uti_uncomplicated",
@@ -31,12 +32,20 @@ export default function NewCasePage() {
   });
 
   const submit = async () => {
+    setError("");
     const res = await fetch("/api/cases", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form)
     });
-    if (!res.ok) return;
+
+    if (!res.ok) {
+      const payload = await res.json().catch(() => null);
+      const message = payload?.error || "Failed to generate recommendation.";
+      setError(message);
+      return;
+    }
+
     const data = await res.json();
     router.push(`/case/${data.id}`);
   };
@@ -80,6 +89,7 @@ export default function NewCasePage() {
           <button onClick={submit} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white">Generate recommendation</button>
           <p className="text-xs text-slate-600">Human confirmation required before any order changes.</p>
         </div>
+        {error && <p className="mt-3 rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-800">{error}</p>}
       </div>
       <SourceBadge citation="WHO AWaRe guidance + CDC Core Elements" href="https://aware.essentialmeds.org/" />
     </main>
