@@ -15,10 +15,50 @@ cp .env.example .env
 npm install
 npx prisma generate
 npx prisma db push
-npm run prisma:seed
+npx prisma db seed
 npm run dev
 ```
 Open http://localhost:3000/new-case
+
+## Vercel production setup
+
+### 1) DATABASE_URL requirements
+Use a managed Postgres URL in Vercel project environment variables.
+
+Expected format:
+```text
+postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require
+```
+
+- Do **not** use SQLite file URLs (`file:./dev.db`) in production on Vercel.
+- Set `DATABASE_URL` in Vercel for **Production**, **Preview**, and optionally **Development** environments.
+
+### 2) Build / Prisma client generation
+This project includes:
+- `postinstall`: `prisma generate`
+- `vercel-build`: `prisma generate && next build`
+
+These ensure Prisma Client is generated in Vercel builds.
+
+### 3) Run schema migrations in production
+Do **not** run `prisma migrate dev` in production.
+
+After deploying and setting `DATABASE_URL`, run once against production:
+```bash
+npx prisma migrate deploy
+```
+
+Expected result: all checked-in migrations are applied and API routes can query/create records.
+
+### 4) Seed initial recommendation data
+The recommender requires `InfectionGuide` and `Antibiotic` seed data.
+
+Run (against the intended database):
+```bash
+npx prisma db seed
+```
+
+Expected result: baseline antibiotics + infection guides are inserted so `/api/cases` can generate recommendations.
 
 ## Demo script
 1. Go to `/new-case` and submit a UTI uncomplicated case with no selected antibiotic.
