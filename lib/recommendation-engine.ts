@@ -1,10 +1,21 @@
-import { AwareGroup, Antibiotic, InfectionGuide } from "@prisma/client";
 import { addHours } from "date-fns";
 import { DurationRules, EvidenceLink, RegimenOption } from "./types";
 
+type AntibioticLike = {
+  name: string;
+  awareGroup: string;
+  renalAdjustmentText: string;
+  notes: string;
+};
+
+type InfectionGuideLike = {
+  recommendedOptionsJson: string;
+  durationRulesJson: string;
+};
+
 export function generateRecommendation(input: {
-  guide: InfectionGuide;
-  antibiotics: Antibiotic[];
+  guide: InfectionGuideLike;
+  antibiotics: AntibioticLike[];
   severity: string;
   chosenAntibiotic?: string;
   chosenDurationDays?: number;
@@ -16,7 +27,7 @@ export function generateRecommendation(input: {
     const abx = input.antibiotics.find((a) => a.name === option.antibioticName);
     return {
       ...option,
-      awareGroup: abx?.awareGroup ?? AwareGroup.WATCH,
+      awareGroup: abx?.awareGroup ?? "WATCH",
       renalAdjustmentText: abx?.renalAdjustmentText ?? "Check local renal dosing protocol",
       notes: abx?.notes ?? ""
     };
