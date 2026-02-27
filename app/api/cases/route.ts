@@ -48,6 +48,12 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
+    console.info("[POST /api/cases] REQUEST", {
+      setting: body.setting,
+      infectionKey: body.suspectedInfectionKey,
+      severity: body.severity
+    });
+
     const guide = await prisma.infectionGuide.findUnique({
       where: {
         infectionKey_setting: {
@@ -59,7 +65,14 @@ export async function POST(req: NextRequest) {
 
     if (!guide) {
       return NextResponse.json(
-        { error: "No guide found for infection/setting. Seed baseline data with `npx prisma db seed`." },
+        {
+          error: `No guide found for setting '${body.setting}' and infection '${body.suspectedInfectionKey}'. Seed baseline data with \`npx prisma db seed\`.`,
+          code: "GUIDE_NOT_FOUND",
+          requested: {
+            setting: body.setting,
+            suspectedInfectionKey: body.suspectedInfectionKey
+          }
+        },
         { status: 404 }
       );
     }
