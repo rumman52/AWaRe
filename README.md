@@ -20,9 +20,9 @@ npm run dev
 ```
 Open http://localhost:3000/new-case
 
-## Vercel production setup
+## Production bootstrap on Vercel
 
-Run these commands **once** after connecting your Vercel project to Postgres.
+Vercel builds now run Prisma client generation and schema migrations automatically (via `vercel-build`). Seeding remains a one-command step and is idempotent.
 
 ### 1) Pull Vercel env vars locally
 ```bash
@@ -46,25 +46,24 @@ postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require
 ### 3) Build / Prisma client generation
 This project includes:
 - `postinstall`: `prisma generate`
-- `vercel-build`: `prisma generate && next build`
+- `vercel-build`: `prisma generate && prisma migrate deploy && next build`
 
 These ensure Prisma Client is generated in Vercel builds and stays fresh per deployment.
 
-### 4) Run schema migrations in production
-Do **not** run `prisma migrate dev` in production.
+### 4) Automatic migrations during Vercel builds
+`vercel-build` runs `prisma migrate deploy`, so each production deployment applies checked-in migrations before building the app.
 
-Apply checked-in migrations against the connected Vercel database:
-```bash
-npx prisma migrate deploy
-```
+Do **not** use `prisma migrate dev` in production.
 
 ### 5) Seed initial recommendation data
-The recommender requires `InfectionGuide` and `Antibiotic` seed data.
+The recommender requires `InfectionGuide` and `Antibiotic` seed data. Seed configuration is defined in `package.json` (`prisma.seed`) and runs `tsx prisma/seed.ts`.
 
-Run:
+Run when bootstrapping a new database:
 ```bash
 npx prisma db seed
 ```
+
+The seed script is idempotent (`upsert`) and safe to run multiple times.
 
 ### 6) Verify backend health + recommendation endpoint
 Health check:
