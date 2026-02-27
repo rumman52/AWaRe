@@ -58,8 +58,9 @@ Do **not** use `prisma migrate dev` in production.
 ### 5) Seed initial recommendation data
 The recommender requires `InfectionGuide` and `Antibiotic` seed data. Seed configuration is defined in `package.json` (`prisma.seed`) and runs `tsx prisma/seed.ts`.
 
-Run when bootstrapping a new database:
+Run when bootstrapping a new production database:
 ```bash
+vercel env pull .env.production
 npx prisma db seed
 ```
 

@@ -7,40 +7,56 @@ const antibiotics = [
     name: "Nitrofurantoin",
     awareGroup: "ACCESS",
     adultDoseText: "100 mg PO q12h",
-    renalAdjustmentText: "Avoid if eGFR <30",
-    notes: "Uncomplicated lower UTI",
+    renalAdjustmentText: "Avoid if eGFR <30 mL/min/1.73m²",
+    notes: "Preferred for uncomplicated lower UTI when appropriate",
     sourceUrl: "https://aware.essentialmeds.org/"
   },
   {
     name: "Amoxicillin",
     awareGroup: "ACCESS",
-    adultDoseText: "500 mg PO q8h",
-    renalAdjustmentText: "Adjust if severe impairment",
-    notes: "CAP/SSTI if susceptible",
+    adultDoseText: "1 g PO q8h",
+    renalAdjustmentText: "Adjust interval in severe renal impairment",
+    notes: "Option for susceptible respiratory and skin infections",
+    sourceUrl: "https://aware.essentialmeds.org/"
+  },
+  {
+    name: "Cephalexin",
+    awareGroup: "ACCESS",
+    adultDoseText: "500 mg PO q6-8h",
+    renalAdjustmentText: "Adjust dose/interval when eGFR is reduced",
+    notes: "Common oral option for mild skin/soft tissue infections",
+    sourceUrl: "https://aware.essentialmeds.org/"
+  },
+  {
+    name: "Doxycycline",
+    awareGroup: "ACCESS",
+    adultDoseText: "100 mg PO q12h",
+    renalAdjustmentText: "No adjustment usually required",
+    notes: "Consider based on local epidemiology and contraindications",
     sourceUrl: "https://aware.essentialmeds.org/"
   },
   {
     name: "Ceftriaxone",
     awareGroup: "WATCH",
-    adultDoseText: "1-2 g IV daily",
-    renalAdjustmentText: "Usually no adjustment",
-    notes: "Severe infection criteria",
+    adultDoseText: "1-2 g IV q24h",
+    renalAdjustmentText: "Usually no renal adjustment",
+    notes: "Reserve for criteria indicating broader-spectrum/parenteral need",
     sourceUrl: "https://aware.essentialmeds.org/"
   },
   {
     name: "Ciprofloxacin",
     awareGroup: "WATCH",
     adultDoseText: "500 mg PO q12h",
-    renalAdjustmentText: "Reduce with low eGFR",
-    notes: "Use with caution",
+    renalAdjustmentText: "Reduce dose/extend interval in renal impairment",
+    notes: "Use only when indicated and Access options are unsuitable",
     sourceUrl: "https://aware.essentialmeds.org/"
   },
   {
     name: "Linezolid",
     awareGroup: "RESERVE",
     adultDoseText: "600 mg IV/PO q12h",
-    renalAdjustmentText: "Monitor prolonged use",
-    notes: "MDR indications only",
+    renalAdjustmentText: "No routine adjustment; monitor prolonged use",
+    notes: "Reserve for confirmed/suspected MDR gram-positive infections",
     sourceUrl: "https://aware.essentialmeds.org/"
   }
 ] as const;
@@ -55,52 +71,29 @@ const guides = [
         doseText: "100 mg PO q12h",
         route: "PO",
         durationDaysRange: [5, 5],
-        criteria: "No pyelonephritis signs"
+        criteria: "No systemic signs or pyelonephritis concerns"
       },
       {
         antibioticName: "Amoxicillin",
         doseText: "500 mg PO q8h",
         route: "PO",
         durationDaysRange: [5, 7],
-        criteria: "Susceptibility known"
+        criteria: "Only if susceptibility known/likely"
       },
       {
         antibioticName: "Ciprofloxacin",
         doseText: "500 mg PO q12h",
         route: "PO",
         durationDaysRange: [5, 7],
-        criteria: "Only if no Access option and risk factors"
+        criteria: "Use only if Access options are not appropriate"
       }
     ]),
     durationRulesJson: JSON.stringify({ uncomplicated: [5, 7], complicated: [7, 10], severe: [10, 14] }),
-    redFlagsJson: JSON.stringify(["sepsis signs", "flank pain", "pregnancy with fever"]),
+    redFlagsJson: JSON.stringify(["fever with flank pain", "sepsis signs", "pregnancy with systemic symptoms"]),
     sourceUrl: "https://www.who.int/publications/i/item/9789240062382"
   },
   {
-    infectionKey: "uti_complicated",
-    setting: "hospital",
-    recommendedOptionsJson: JSON.stringify([
-      {
-        antibioticName: "Ceftriaxone",
-        doseText: "1 g IV daily",
-        route: "IV",
-        durationDaysRange: [7, 10],
-        criteria: "Complicated UTI needing admission"
-      },
-      {
-        antibioticName: "Ciprofloxacin",
-        doseText: "400 mg IV/500 mg PO q12h",
-        route: "IV/PO",
-        durationDaysRange: [7, 10],
-        criteria: "Step-down when stable"
-      }
-    ]),
-    durationRulesJson: JSON.stringify({ uncomplicated: [5, 7], complicated: [7, 10], severe: [10, 14] }),
-    redFlagsJson: JSON.stringify(["obstruction", "AKI", "sepsis"]),
-    sourceUrl: "https://aware.essentialmeds.org/"
-  },
-  {
-    infectionKey: "cap_mild",
+    infectionKey: "pneumonia_mild",
     setting: "primary_care",
     recommendedOptionsJson: JSON.stringify([
       {
@@ -108,64 +101,55 @@ const guides = [
         doseText: "1 g PO q8h",
         route: "PO",
         durationDaysRange: [5, 7],
-        criteria: "Mild CAP, low resistance risk"
+        criteria: "Mild CAP without admission criteria"
+      },
+      {
+        antibioticName: "Doxycycline",
+        doseText: "100 mg PO q12h",
+        route: "PO",
+        durationDaysRange: [5, 7],
+        criteria: "Alternative based on local guidance and contraindications"
       },
       {
         antibioticName: "Ceftriaxone",
-        doseText: "1 g IV daily",
+        doseText: "1 g IV q24h",
         route: "IV",
         durationDaysRange: [5, 7],
-        criteria: "If admission/failed oral therapy"
+        criteria: "If escalated care/admission becomes necessary"
       }
     ]),
     durationRulesJson: JSON.stringify({ uncomplicated: [5, 7], complicated: [7, 10], severe: [10, 14] }),
-    redFlagsJson: JSON.stringify(["SpO2 <92%", "hemodynamic instability"]),
+    redFlagsJson: JSON.stringify(["SpO2 <92%", "hemodynamic instability", "confusion or inability to take oral therapy"]),
     sourceUrl: "https://www.who.int/publications/i/item/9789240062382"
   },
   {
-    infectionKey: "cap_severe",
-    setting: "hospital",
+    infectionKey: "skin_soft_tissue_mild",
+    setting: "primary_care",
     recommendedOptionsJson: JSON.stringify([
       {
-        antibioticName: "Ceftriaxone",
-        doseText: "2 g IV daily",
-        route: "IV",
-        durationDaysRange: [7, 10],
-        criteria: "Severe CAP initial therapy"
+        antibioticName: "Cephalexin",
+        doseText: "500 mg PO q6-8h",
+        route: "PO",
+        durationDaysRange: [5, 7],
+        criteria: "Mild non-purulent SSTI"
       },
-      {
-        antibioticName: "Linezolid",
-        doseText: "600 mg IV/PO q12h",
-        route: "IV/PO",
-        durationDaysRange: [10, 14],
-        criteria: "Reserve for confirmed resistant gram-positive infection"
-      }
-    ]),
-    durationRulesJson: JSON.stringify({ uncomplicated: [5, 7], complicated: [7, 10], severe: [10, 14] }),
-    redFlagsJson: JSON.stringify(["shock", "ICU need"]),
-    sourceUrl: "https://www.cdc.gov/antibiotic-use/hcp/core-elements/hospital.html"
-  },
-  {
-    infectionKey: "ssti",
-    setting: "hospital",
-    recommendedOptionsJson: JSON.stringify([
       {
         antibioticName: "Amoxicillin",
         doseText: "500 mg PO q8h",
         route: "PO",
         durationDaysRange: [5, 7],
-        criteria: "Mild non-purulent"
+        criteria: "If local susceptibility supports use"
       },
       {
         antibioticName: "Ceftriaxone",
-        doseText: "1 g IV daily",
+        doseText: "1 g IV q24h",
         route: "IV",
         durationDaysRange: [5, 10],
-        criteria: "Moderate systemic features"
+        criteria: "Escalate if systemic features or oral therapy not feasible"
       }
     ]),
     durationRulesJson: JSON.stringify({ uncomplicated: [5, 7], complicated: [7, 10], severe: [10, 14] }),
-    redFlagsJson: JSON.stringify(["necrotizing signs", "rapid progression"]),
+    redFlagsJson: JSON.stringify(["rapid progression", "necrotizing signs", "systemic toxicity"]),
     sourceUrl: "https://aware.essentialmeds.org/"
   }
 ] as const;
@@ -192,7 +176,7 @@ async function main() {
     });
   }
 
-  console.log("Seed complete: Antibiotic and InfectionGuide records are up to date.");
+  console.log(`Seed complete: upserted ${antibiotics.length} antibiotics and ${guides.length} infection guides.`);
 }
 
 main()
