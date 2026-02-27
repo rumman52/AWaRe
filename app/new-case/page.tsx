@@ -44,7 +44,8 @@ export default function NewCasePage() {
       if (!res.ok) {
         const payload = await res.json().catch(() => null);
         const message = payload?.error || "Failed to generate recommendation.";
-        setError(message);
+        const code = payload?.code ? ` (code: ${payload.code})` : "";
+        setError(`${message}${code}`);
         return;
       }
 

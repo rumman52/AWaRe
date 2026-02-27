@@ -5,26 +5,38 @@ import { generateRecommendation, renderRationale } from "@/lib/recommendation-en
 
 export const runtime = "nodejs";
 
-function mapRecommendationError(error: unknown): string {
+function mapRecommendationError(error: unknown): { error: string; code?: string } {
   if (error instanceof Prisma.PrismaClientInitializationError) {
-    return "Database connection failed. Verify DATABASE_URL and network access to your Postgres instance.";
+    return {
+      error: "Database connection failed. Verify DATABASE_URL and network access to your Postgres instance.",
+      code: error.errorCode
+    };
   }
 
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === "P2021") {
-      return "Database schema is missing required tables. Run `npx prisma migrate deploy` and `npx prisma db seed`.";
+      return {
+        error: "Database schema is missing required tables. Run `npx prisma migrate deploy` and `npx prisma db seed`.",
+        code: error.code
+      };
     }
 
     if (error.code === "P2022") {
-      return "Database schema is out of date (missing columns). Run `npx prisma migrate deploy` to apply latest migrations.";
+      return {
+        error: "Database schema is out of date (missing columns). Run `npx prisma migrate deploy` to apply latest migrations.",
+        code: error.code
+      };
     }
   }
 
   if (error instanceof SyntaxError) {
-    return "Guide configuration is invalid JSON. Re-seed guide data with `npx prisma db seed`.";
+    return { error: "Guide configuration is invalid JSON. Re-seed guide data with `npx prisma db seed`.", code: "INVALID_GUIDE_JSON" };
   }
 
-  return "Failed to generate recommendation. Verify DATABASE_URL and that migrations are applied.";
+  return {
+    error: "Failed to generate recommendation. Verify DATABASE_URL and that migrations are applied.",
+    code: "INTERNAL_ERROR"
+  };
 }
 
 export async function POST(req: NextRequest) {
@@ -108,6 +120,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ id: caseRecord.id });
   } catch (error) {
     console.error("[POST /api/cases] Failed to generate recommendation:", error);
-    return NextResponse.json({ error: mapRecommendationError(error) }, { status: 500 });
+    const mappedError = mapRecommendationError(error);
+    return NextResponse.json(mappedError, { status: 500 });
   }
 }
