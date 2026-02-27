@@ -1,8 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { prisma, getDatabaseConfigError } from "@/lib/prisma";
 import { generateRecommendation, renderRationale } from "@/lib/recommendation-engine";
 
 export const runtime = "nodejs";
+
+function mapRecommendationError(error: unknown): string {
+  if (error instanceof Prisma.PrismaClientInitializationError) {
+    return "Database connection failed. Verify DATABASE_URL and network access to your Postgres instance.";
+  }
+
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === "P2021") {
+      return "Database schema is missing required tables. Run `npx prisma migrate deploy` and `npx prisma db seed`.";
+    }
+
+    if (error.code === "P2022") {
+      return "Database schema is out of date (missing columns). Run `npx prisma migrate deploy` to apply latest migrations.";
+    }
+  }
+
+  if (error instanceof SyntaxError) {
+    return "Guide configuration is invalid JSON. Re-seed guide data with `npx prisma db seed`.";
+  }
+
+  return "Failed to generate recommendation. Verify DATABASE_URL and that migrations are applied.";
+}
 
 export async function POST(req: NextRequest) {
   const databaseConfigError = getDatabaseConfigError();
@@ -23,7 +46,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (!guide) {
-      return NextResponse.json({ error: "No guide found for infection/setting" }, { status: 404 });
+      return NextResponse.json(
+        { error: "No guide found for infection/setting. Seed baseline data with `npx prisma db seed`." },
+        { status: 404 }
+      );
     }
 
     const antibiotics = await prisma.antibiotic.findMany();
@@ -82,9 +108,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ id: caseRecord.id });
   } catch (error) {
     console.error("[POST /api/cases] Failed to generate recommendation:", error);
-    return NextResponse.json(
-      { error: "Failed to generate recommendation. Verify DATABASE_URL and that migrations are applied." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: mapRecommendationError(error) }, { status: 500 });
   }
 }
