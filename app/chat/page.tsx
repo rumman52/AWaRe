@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type ChatMode = "case" | "general";
@@ -16,7 +16,7 @@ type ChatError = {
   infectionKey?: string;
 };
 
-export default function ChatPage() {
+function ChatPageContent() {
   const searchParams = useSearchParams();
   const caseIdFromQuery = searchParams.get("caseId") ?? "";
 
@@ -154,5 +154,13 @@ export default function ChatPage() {
         </form>
       </section>
     </main>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<main className="mx-auto max-w-3xl"><p className="text-sm text-slate-500">Loading chat…</p></main>}>
+      <ChatPageContent />
+    </Suspense>
   );
 }
