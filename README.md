@@ -139,3 +139,30 @@ Run app with `npm run dev`, then capture key screens:
 - `/case/[id]`
 - `/dashboard`
 Use browser tooling (Playwright) to save screenshots in an `artifacts/` directory.
+
+
+## Chat assistant (OpenRouter + Arcee)
+
+### Environment variables
+- Set `OPENROUTER_API_KEY` in Vercel Project → Settings → Environment Variables for **Production** and **Preview** (and Development if used).
+- For local development, create `.env.local` with:
+
+```bash
+OPENROUTER_API_KEY=your_openrouter_key
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require
+```
+
+### Local testing
+```bash
+npm run dev
+```
+Then test:
+- `http://localhost:3000/chat` (general AMR education mode)
+- `http://localhost:3000/chat?caseId=<existing-case-id>` (case-aware mode)
+
+### Safety notes
+- The chat endpoint calls OpenRouter only from server routes; client code never receives API keys.
+- Internal reasoning is enabled (`reasoning: { enabled: true }`) to improve answer quality, but chain-of-thought / `reasoning_details` are never returned to clients.
+- The assistant is decision-support and education only, refuses personal diagnosis/treatment requests, and includes a disclaimer: "Educational only — not medical advice."
+- If severe/emergency symptoms are raised, the assistant directs users to urgent emergency care.
+- Demo abuse guard: in-memory rate limit of 40 requests/hour per IP on `/api/chat`.

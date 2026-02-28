@@ -29,6 +29,7 @@ export default async function CasePage({ params }: { params: Promise<{ id: strin
         <p className="text-sm">Patient: {caseData.age} y/o {caseData.sex}; renal: {caseData.creatinineOrEgfr}; allergies: {caseData.allergiesText || "none reported"}</p>
         <p className="mt-2 text-sm font-medium">Review due: {format(rec.reviewDueAt, "PPpp")}</p>
         <label className="mt-3 flex items-center gap-2 text-sm"><input type="checkbox" defaultChecked /> Set review reminder in 48-72h</label>
+        <a href={`/chat?caseId=${caseData.id}`} className="mt-3 inline-block rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white">Ask assistant about this case</a>
       </section>
 
       <section className="card">
