@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SourceBadge } from "@/components/source-badge";
 
@@ -58,6 +59,16 @@ export default function NewCasePage() {
 
   return (
     <main className="space-y-4">
+      <section className="card border-blue-200 bg-blue-50">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-blue-900">Need the chat assistant?</h2>
+            <p className="text-sm text-blue-800">Use general mode for health education, or open case-grounded mode from a case details page.</p>
+          </div>
+          <Link href="/chat" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white">Open chatbox</Link>
+        </div>
+      </section>
+
       <div className="card">
         <h2 className="mb-3 text-lg font-semibold">Create stewardship case</h2>
         <div className="grid gap-3 md:grid-cols-2">
