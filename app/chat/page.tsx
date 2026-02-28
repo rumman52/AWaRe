@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type ChatMode = "case" | "general";
@@ -18,15 +18,21 @@ type ChatError = {
 
 export default function ChatPage() {
   const searchParams = useSearchParams();
-  const caseId = searchParams.get("caseId") ?? "";
+  const caseIdFromQuery = searchParams.get("caseId") ?? "";
 
-  const initialMode = useMemo<ChatMode>(() => (caseId ? "case" : "general"), [caseId]);
-
-  const [mode, setMode] = useState<ChatMode>(initialMode);
+  const [mode, setMode] = useState<ChatMode>(caseIdFromQuery ? "case" : "general");
+  const [caseId, setCaseId] = useState(caseIdFromQuery);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ChatError | null>(null);
+
+  useEffect(() => {
+    setCaseId(caseIdFromQuery);
+    if (caseIdFromQuery) {
+      setMode("case");
+    }
+  }, [caseIdFromQuery]);
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
