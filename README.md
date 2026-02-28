@@ -112,6 +112,13 @@ console.log(response.content);
 
 The helper makes an initial request with `reasoning: { enabled: true }`, then sends a second request that includes the assistant `reasoning_details` unmodified.
 
+
+### Vercel deployment checklist for chat
+1. In Vercel project settings, add `OPENROUTER_API_KEY` for **Preview** and **Production** environments.
+2. Redeploy the project (or trigger a new deployment) so the server route can read the new env var.
+3. Visit `/chat` to use general health mode.
+4. Optional case-grounded mode: open `/chat?caseId=<case-id>`.
+
 ## Demo script
 1. Go to `/new-case` and submit a UTI uncomplicated case with no selected antibiotic.
 2. Create another case selecting **Ceftriaxone** or **Ciprofloxacin** to trigger Watch warning.
