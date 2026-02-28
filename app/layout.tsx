@@ -16,6 +16,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Link href="/new-case" className="rounded-lg bg-slate-900 px-3 py-2 text-white">New Case</Link>
               <Link href="/dashboard" className="rounded-lg border border-slate-300 px-3 py-2">Dashboard</Link>
               <Link href="/admin/guides" className="rounded-lg border border-slate-300 px-3 py-2">Guides</Link>
+              <Link href="/chat" className="rounded-lg border border-slate-300 px-3 py-2">Chat</Link>
             </nav>
           </header>
           <div className="mb-4">
