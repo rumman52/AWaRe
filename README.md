@@ -118,7 +118,6 @@ The helper makes an initial request with `reasoning: { enabled: true }`, then se
 2. Redeploy the project (or trigger a new deployment) so the server route can read the new env var.
 3. Visit `/chat` to use general health mode.
 4. Optional case-grounded mode: open `/chat?caseId=<case-id>`.
-5. If chat seems missing: the home route redirects to `/new-case`, so open chat from the top navigation (**Chat**) or go directly to `/chat`.
 
 ## Demo script
 1. Go to `/new-case` and submit a UTI uncomplicated case with no selected antibiotic.
