@@ -93,6 +93,25 @@ curl -i -X POST http://localhost:3000/api/cases \
     "justificationText":""
   }'
 ```
+
+## OpenRouter reasoning continuity example
+If you need to preserve `reasoning_details` between turns, use `runReasoningFollowUp` from `lib/openrouter-reasoning.ts`.
+
+```ts
+import { runReasoningFollowUp } from "@/lib/openrouter-reasoning";
+
+const response = await runReasoningFollowUp({
+  apiKey: process.env.OPENROUTER_API_KEY!,
+  model: "arcee-ai/trinity-large-preview:free",
+  prompt: "How many r's are in the word 'strawberry'?",
+  followUpPrompt: "Are you sure? Think carefully."
+});
+
+console.log(response.content);
+```
+
+The helper makes an initial request with `reasoning: { enabled: true }`, then sends a second request that includes the assistant `reasoning_details` unmodified.
+
 ## Demo script
 1. Go to `/new-case` and submit a UTI uncomplicated case with no selected antibiotic.
 2. Create another case selecting **Ceftriaxone** or **Ciprofloxacin** to trigger Watch warning.
