@@ -133,7 +133,7 @@ function ChatPageContent() {
         </section>
       )}
 
-      {error && error.error !== "no_guide" && (
+      {error && error.error !== "no_guide" && error.error !== "missing_openrouter_key" && (
         <section className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-800">Request failed: {error.error}</section>
       )}
 
