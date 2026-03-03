@@ -122,8 +122,8 @@ export function NewCasePanel({ onCaseReady, onAskAssistant }: { onCaseReady: (ca
   };
 
   return (
-    <section className="space-y-5">
-      <div className="grid gap-2 sm:grid-cols-4">
+    <section className="space-y-4 sm:space-y-5">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {["Patient", "Infection", "Safety", "Results"].map((label, idx) => {
           const complete = idx + 1 < activeStep;
           const current = idx + 1 === activeStep;
@@ -141,12 +141,12 @@ export function NewCasePanel({ onCaseReady, onAskAssistant }: { onCaseReady: (ca
       {copyToast && <Alert tone="success">Copied!</Alert>}
 
       <Card className="p-0">
-        <button className="flex w-full items-center justify-between p-5 text-left" onClick={() => setOpenCards((prev) => ({ ...prev, patient: !prev.patient }))}>
+        <button className="flex w-full items-center justify-between p-4 text-left sm:p-5" onClick={() => setOpenCards((prev) => ({ ...prev, patient: !prev.patient }))}>
           <h3 className="text-base font-semibold">Patient (required)</h3>
           <ChevronDown className={`h-4 w-4 transition ${openCards.patient ? "rotate-180" : ""}`} />
         </button>
         {openCards.patient && (
-          <div className="grid gap-4 border-t border-slate-200 p-5 md:grid-cols-2">
+          <div className="grid gap-4 border-t border-slate-200 p-4 md:grid-cols-2 sm:p-5">
             <label><span className="field-label">Age</span><Input type="number" value={form.age} onChange={(e) => setForm({ ...form, age: Number(e.target.value) })} /></label>
             <label><span className="field-label">Sex</span><Input value={form.sex} onChange={(e) => setForm({ ...form, sex: e.target.value })} /></label>
             <label className="md:col-span-2"><span className="field-label">Symptoms / notes</span><Textarea className="min-h-24" value={form.symptomsText} onChange={(e) => setForm({ ...form, symptomsText: e.target.value })} /></label>
@@ -155,12 +155,12 @@ export function NewCasePanel({ onCaseReady, onAskAssistant }: { onCaseReady: (ca
       </Card>
 
       <Card className="p-0">
-        <button className="flex w-full items-center justify-between p-5 text-left" onClick={() => setOpenCards((prev) => ({ ...prev, infection: !prev.infection }))}>
+        <button className="flex w-full items-center justify-between p-4 text-left sm:p-5" onClick={() => setOpenCards((prev) => ({ ...prev, infection: !prev.infection }))}>
           <h3 className="text-base font-semibold">Infection (required)</h3>
           <ChevronDown className={`h-4 w-4 transition ${openCards.infection ? "rotate-180" : ""}`} />
         </button>
         {openCards.infection && (
-          <div className="grid gap-4 border-t border-slate-200 p-5 md:grid-cols-2">
+          <div className="grid gap-4 border-t border-slate-200 p-4 md:grid-cols-2 sm:p-5">
             <label>
               <span className="field-label">Care setting</span>
               <Select value={form.setting} onChange={(e) => setForm({ ...form, setting: e.target.value })}>
@@ -184,12 +184,12 @@ export function NewCasePanel({ onCaseReady, onAskAssistant }: { onCaseReady: (ca
       </Card>
 
       <Card className="p-0">
-        <button className="flex w-full items-center justify-between p-5 text-left" onClick={() => setOpenCards((prev) => ({ ...prev, safety: !prev.safety }))}>
+        <button className="flex w-full items-center justify-between p-4 text-left sm:p-5" onClick={() => setOpenCards((prev) => ({ ...prev, safety: !prev.safety }))}>
           <h3 className="text-base font-semibold">Safety (optional)</h3>
           <ChevronDown className={`h-4 w-4 transition ${openCards.safety ? "rotate-180" : ""}`} />
         </button>
         {openCards.safety && (
-          <div className="grid gap-4 border-t border-slate-200 p-5 md:grid-cols-2">
+          <div className="grid gap-4 border-t border-slate-200 p-4 md:grid-cols-2 sm:p-5">
             <label>
               <span className="field-label">Allergies</span>
               <Input value={form.allergiesText} onChange={(e) => setForm({ ...form, allergiesText: e.target.value })} placeholder="e.g., penicillin rash" />
@@ -209,22 +209,22 @@ export function NewCasePanel({ onCaseReady, onAskAssistant }: { onCaseReady: (ca
 
       <Card className="space-y-3">
         <h3 className="text-base font-semibold">Actions</h3>
-        <div className="flex flex-wrap gap-3">
-          <Button onClick={submit} disabled={isLoading || missingFields.length > 0}>
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
+          <Button className="w-full sm:w-auto" onClick={submit} disabled={isLoading || missingFields.length > 0}>
             {isLoading ? <><Loader2 className="h-4 w-4 animate-spin" /> Generating recommendation...</> : <><Sparkles className="h-4 w-4" /> Generate Recommendation</>}
           </Button>
-          <Button variant="secondary" onClick={copySummary}><Clipboard className="h-4 w-4" /> Copy case summary</Button>
-          <Button variant="ghost" disabled={!caseId} onClick={() => caseId && onAskAssistant(caseId)}><MessageCircle className="h-4 w-4" /> Ask assistant about this case</Button>
+          <Button className="w-full sm:w-auto" variant="secondary" onClick={copySummary}><Clipboard className="h-4 w-4" /> Copy case summary</Button>
+          <Button className="w-full sm:w-auto" variant="ghost" disabled={!caseId} onClick={() => caseId && onAskAssistant(caseId)}><MessageCircle className="h-4 w-4" /> Ask assistant about this case</Button>
         </div>
       </Card>
 
       <div ref={resultsRef}>
         {recommendations.length > 0 && (
-          <Card className="space-y-4 border-t-4 border-t-indigo-400">
+          <Card className="space-y-4 overflow-hidden border-t-4 border-t-indigo-400">
             <h3 className="text-lg font-semibold">Results</h3>
             {recommendations.map((option) => (
-              <div key={option.antibioticName} className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="flex items-center justify-between gap-2">
+              <div key={option.antibioticName} className="rounded-xl border border-slate-200 bg-white p-3 sm:p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="font-semibold text-slate-900">{option.antibioticName}</p>
                   <AwareBadge group={option.awareGroup} />
                 </div>

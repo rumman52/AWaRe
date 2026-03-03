@@ -67,9 +67,9 @@ export function ChatPanel({ latestCaseId }: { latestCaseId: string }) {
           <p className="inline-flex items-center gap-2 text-lg font-semibold"><Bot className="h-5 w-5 text-indigo-600" /> AMR Assistant</p>
           <p className="text-xs text-slate-500">Educational support only. Confirm clinical decisions with a licensed clinician.</p>
         </div>
-        <div className="inline-flex rounded-xl border border-teal-200 bg-teal-50 p-1 text-sm">
-          <button type="button" className={`rounded-lg px-3 py-1.5 ${mode === "case" ? "bg-indigo-600 text-white" : "text-slate-700"}`} onClick={() => setMode("case")}>About this case</button>
-          <button type="button" className={`rounded-lg px-3 py-1.5 ${mode === "general" ? "bg-indigo-600 text-white" : "text-slate-700"}`} onClick={() => setMode("general")}>General education</button>
+        <div className="inline-flex w-full rounded-xl border border-teal-200 bg-teal-50 p-1 text-sm sm:w-auto">
+          <button type="button" className={`flex-1 rounded-lg px-3 py-1.5 text-center sm:flex-none ${mode === "case" ? "bg-indigo-600 text-white" : "text-slate-700"}`} onClick={() => setMode("case")}>About this case</button>
+          <button type="button" className={`flex-1 rounded-lg px-3 py-1.5 text-center sm:flex-none ${mode === "general" ? "bg-indigo-600 text-white" : "text-slate-700"}`} onClick={() => setMode("general")}>General education</button>
         </div>
       </div>
 
@@ -85,11 +85,11 @@ export function ChatPanel({ latestCaseId }: { latestCaseId: string }) {
         ))}
       </div>
 
-      <div className="max-h-[430px] space-y-3 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="max-h-[55vh] space-y-3 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-3 sm:max-h-[430px] sm:p-4">
         {messages.length === 0 && <p className="text-sm text-slate-500">No messages yet. Try one of the suggested prompts to get started.</p>}
         {messages.map((msg, idx) => (
           <div key={`${msg.role}-${idx}`} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm shadow-sm ${msg.role === "user" ? "bg-indigo-600 text-white" : "border border-slate-200 bg-white text-slate-900"}`}>
+            <div className={`max-w-[92%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[85%] sm:px-4 ${msg.role === "user" ? "bg-indigo-600 text-white" : "border border-slate-200 bg-white text-slate-900"}`}>
               {msg.content}
             </div>
           </div>
@@ -97,9 +97,9 @@ export function ChatPanel({ latestCaseId }: { latestCaseId: string }) {
         {isLoading && <p className="text-sm text-slate-500"> <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> Thinking...</p>}
       </div>
 
-      <form className="flex gap-2" onSubmit={onSubmit}>
+      <form className="flex flex-col gap-2 sm:flex-row" onSubmit={onSubmit}>
         <Input value={input} onChange={(event) => setInput(event.target.value)} placeholder={placeholder} />
-        <Button type="submit" disabled={isLoading || !input.trim() || (mode === "case" && !latestCaseId)}>
+        <Button className="w-full sm:w-auto" type="submit" disabled={isLoading || !input.trim() || (mode === "case" && !latestCaseId)}>
           <Send className="h-4 w-4" /> Send
         </Button>
       </form>
