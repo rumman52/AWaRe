@@ -130,7 +130,13 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    return NextResponse.json({ id: caseRecord.id });
+    return NextResponse.json({
+      id: caseRecord.id,
+      suggestedRegimens: recommendation.suggested,
+      warnings: recommendation.warnings,
+      durationWarning: recommendation.durationWarning,
+      reviewDueAt: recommendation.reviewDueAt
+    });
   } catch (error) {
     console.error("[POST /api/cases] Failed to generate recommendation:", error);
     const mappedError = mapRecommendationError(error);

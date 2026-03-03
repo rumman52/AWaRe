@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Activity, BookOpen } from "lucide-react";
 import "./globals.css";
 import { Disclaimer } from "@/components/disclaimer";
 
@@ -6,22 +7,26 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <div className="mx-auto min-h-screen max-w-6xl px-4 py-6">
-          <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-bold">AMR Steward</h1>
-              <p className="text-sm text-slate-600">WHO AWaRe-aligned antibiotic stewardship decision support prototype</p>
+        <header className="border-b border-slate-200 bg-gradient-to-b from-indigo-50 via-white to-white">
+          <div className="app-shell py-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <Link href="/?tab=new-case" className="inline-flex items-center gap-2 text-slate-900">
+                <span className="rounded-xl bg-gradient-to-r from-indigo-600 to-teal-600 p-2 text-white"><Activity className="h-5 w-5" /></span>
+                <span>
+                  <strong className="block leading-tight">AMR Steward</strong>
+                  <span className="text-xs text-slate-600">Trusted AWaRe-aligned decision support</span>
+                </span>
+              </Link>
+              <nav className="flex items-center gap-2">
+                <Link href="/?tab=new-case" className="rounded-xl border border-teal-600 px-3 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-50">Workspace</Link>
+                <Link href="/admin/guides" className="inline-flex items-center gap-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"><BookOpen className="h-4 w-4" /> Guides</Link>
+              </nav>
             </div>
-            <nav className="flex gap-2 text-sm">
-              <Link href="/new-case" className="rounded-lg bg-slate-900 px-3 py-2 text-white">New Case</Link>
-              <Link href="/dashboard" className="rounded-lg border border-slate-300 px-3 py-2">Dashboard</Link>
-              <Link href="/admin/guides" className="rounded-lg border border-slate-300 px-3 py-2">Guides</Link>
-              <Link href="/chat" className="rounded-lg border border-slate-300 px-3 py-2">Chat</Link>
-            </nav>
-          </header>
-          <div className="mb-4">
-            <Disclaimer />
           </div>
+        </header>
+
+        <div className="app-shell pt-6">
+          <div className="mb-4"><Disclaimer /></div>
           {children}
         </div>
       </body>
