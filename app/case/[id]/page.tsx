@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { AlertTriangle, Clock3, Stethoscope } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { AwareBadge } from "@/components/aware/aware-badge";
+import { AwareBadge } from "@/components/ui/AwareBadge";
 import { SourceBadge } from "@/components/source-badge";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";

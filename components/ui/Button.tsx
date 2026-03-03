@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes, forwardRef } from "react";
 import clsx from "clsx";
+import { theme } from "@/lib/theme";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
@@ -10,10 +11,10 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-blue-700 text-white hover:bg-blue-800",
-  secondary: "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100",
+  primary: `${theme.primary.gradient} shadow-sm hover:-translate-y-0.5 hover:shadow-md`,
+  secondary: `${theme.secondary.outline} hover:-translate-y-0.5 hover:bg-teal-50 hover:shadow-sm`,
   ghost: "text-slate-700 hover:bg-slate-100",
-  danger: "bg-red-700 text-white hover:bg-red-800"
+  danger: "bg-red-600 text-white hover:bg-red-700"
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -30,7 +31,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <button
       ref={ref}
       className={clsx(
-        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2",
+        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none",
+        theme.primary.ring,
         variantClasses[variant],
         sizeClasses[size],
         className
