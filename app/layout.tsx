@@ -1,7 +1,13 @@
 import Link from "next/link";
-import { Activity, BookOpen } from "lucide-react";
+import { Activity, BookOpen, LayoutDashboard, MessageCircleMore, PlusCircle } from "lucide-react";
 import "./globals.css";
 import { Disclaimer } from "@/components/disclaimer";
+
+const workspaceNav = [
+  { href: "/?tab=new-case", label: "New Case", icon: PlusCircle },
+  { href: "/?tab=dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/?tab=chat", label: "Chat", icon: MessageCircleMore }
+] as const;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -17,8 +23,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   <span className="text-xs text-slate-600">Trusted AWaRe-aligned decision support</span>
                 </span>
               </Link>
-              <nav className="flex items-center gap-2">
-                <Link href="/?tab=new-case" className="rounded-xl border border-teal-600 px-3 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-50">Workspace</Link>
+              <nav className="flex flex-wrap items-center gap-2">
+                {workspaceNav.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link key={item.href} href={item.href} className="inline-flex items-center gap-1 rounded-xl border border-teal-600 px-3 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-50">
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  );
+                })}
                 <Link href="/admin/guides" className="inline-flex items-center gap-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"><BookOpen className="h-4 w-4" /> Guides</Link>
               </nav>
             </div>
