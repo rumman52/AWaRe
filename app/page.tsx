@@ -11,6 +11,7 @@ import { OverviewPanel } from "@/components/workspace/OverviewPanel";
 import { AwareBadge } from "@/components/ui/AwareBadge";
 
 type TabKey = "overview" | "newcase" | "dashboard" | "chat";
+type ChatMode = "case" | "general";
 
 const tabCopy: Record<TabKey, { title: string; subtitle: string }> = {
   overview: { title: "Overview", subtitle: "Understand AMR Steward at a glance" },
@@ -31,6 +32,7 @@ function WorkspacePage() {
 
   const [activeTab, setActiveTab] = useState<TabKey>(initialTab);
   const [latestCaseId, setLatestCaseId] = useState("");
+  const [chatMode, setChatMode] = useState<ChatMode>("general");
   const showOverviewHero = activeTab === "overview";
 
   useEffect(() => {
@@ -94,12 +96,13 @@ function WorkspacePage() {
                 onCaseReady={(caseId) => setLatestCaseId(caseId)}
                 onAskAssistant={(caseId) => {
                   setLatestCaseId(caseId);
+                  setChatMode("case");
                   onTabChange("chat");
                 }}
               />
             )}
             {activeTab === "dashboard" && <DashboardPanel />}
-            {activeTab === "chat" && <ChatPanel latestCaseId={latestCaseId} />}
+            {activeTab === "chat" && <ChatPanel latestCaseId={latestCaseId} preferredMode={chatMode} />}
           </div>
         </section>
       </div>
