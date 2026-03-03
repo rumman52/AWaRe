@@ -31,6 +31,7 @@ function WorkspacePage() {
 
   const [activeTab, setActiveTab] = useState<TabKey>(initialTab);
   const [latestCaseId, setLatestCaseId] = useState("");
+  const showOverviewHero = activeTab === "overview";
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -46,7 +47,7 @@ function WorkspacePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/40 to-indigo-100/40 p-3 sm:p-6">
       <div className="mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-7xl flex-col gap-4 rounded-3xl border border-white/70 bg-white/70 p-3 shadow-[0_30px_80px_rgba(15,23,42,0.12)] backdrop-blur sm:min-h-[calc(100vh-3rem)] sm:p-6">
-        {activeTab === "overview" && (
+        {showOverviewHero && (
           <header className="rounded-2xl border border-teal-100 bg-white p-4 shadow-sm sm:p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="max-w-3xl space-y-2">
