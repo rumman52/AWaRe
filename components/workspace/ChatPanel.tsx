@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Bot, Loader2, Send } from "lucide-react";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
@@ -16,8 +16,8 @@ const suggestedQuestions = [
   "When should Watch antibiotics be avoided?"
 ];
 
-export function ChatPanel({ latestCaseId }: { latestCaseId: string }) {
-  const [mode, setMode] = useState<ChatMode>("general");
+export function ChatPanel({ latestCaseId, preferredMode }: { latestCaseId: string; preferredMode?: ChatMode }) {
+  const [mode, setMode] = useState<ChatMode>(preferredMode ?? "general");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +27,11 @@ export function ChatPanel({ latestCaseId }: { latestCaseId: string }) {
     () => (mode === "case" ? "Ask about this case context" : "Ask a general stewardship question"),
     [mode]
   );
+
+  useEffect(() => {
+    if (!preferredMode) return;
+    setMode(preferredMode);
+  }, [preferredMode]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
