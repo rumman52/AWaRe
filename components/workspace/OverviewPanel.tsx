@@ -37,9 +37,9 @@ export function OverviewPanel({ onStartNewCase, onOpenChat }: { onStartNewCase: 
         </Card>
       </section>
 
-      <Card className="border-indigo-100 bg-indigo-50 p-4 text-center text-sm text-indigo-900">
-        <p className="font-semibold">Made by The AI Fixers</p>
-        <p className="mt-1 text-indigo-700">All rights reserved.</p>
+      <Card className="overflow-hidden border-slate-200 bg-gradient-to-r from-slate-50 via-white to-indigo-50/60 p-4 text-center shadow-sm">
+        <p className="text-sm font-semibold tracking-tight text-slate-900">Built by The AI Fixers</p>
+        <p className="text-xs font-medium text-slate-600">© 2026 The AI Fixers. All rights reserved.</p>
       </Card>
     </div>
   );
