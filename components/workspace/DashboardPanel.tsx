@@ -2,13 +2,20 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Activity, AlertCircle, ShieldCheck, TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { AwareBadge } from "@/components/ui/AwareBadge";
 import { Card } from "@/components/ui/Card";
 
 type MetricsResponse = {
   metrics: Array<{ date: string; accessCount: number; watchCount: number; reserveCount: number; totalCount: number }>;
   topWatch: Array<{ name: string; count: number }>;
   reviewOverdue: Array<{ caseId: string; reviewDueAt: string; infection: string }>;
+};
+
+const awareColors: Record<"Access" | "Watch" | "Reserve", string> = {
+  Access: "#16A34A",
+  Watch: "#D97706",
+  Reserve: "#DC2626"
 };
 
 export function DashboardPanel() {
@@ -21,9 +28,9 @@ export function DashboardPanel() {
   const latest = data?.metrics[data.metrics.length - 1];
   const awareSplit = useMemo(
     () => [
-      { name: "Access", value: latest?.accessCount ?? 0 },
-      { name: "Watch", value: latest?.watchCount ?? 0 },
-      { name: "Reserve", value: latest?.reserveCount ?? 0 }
+      { name: "Access" as const, value: latest?.accessCount ?? 0 },
+      { name: "Watch" as const, value: latest?.watchCount ?? 0 },
+      { name: "Reserve" as const, value: latest?.reserveCount ?? 0 }
     ],
     [latest]
   );
@@ -50,14 +57,25 @@ export function DashboardPanel() {
         </Card>
       ) : (
         <Card>
-          <h3 className="text-lg font-semibold text-slate-900">Access / Watch / Reserve distribution</h3>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-lg font-semibold text-slate-900">Access / Watch / Reserve distribution</h3>
+            <div className="flex flex-wrap items-center gap-2">
+              <AwareBadge group="ACCESS" />
+              <AwareBadge group="WATCH" />
+              <AwareBadge group="RESERVE" />
+            </div>
+          </div>
           <div className="mt-4 h-[320px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={awareSplit}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
                 <XAxis dataKey="name" />
                 <YAxis allowDecimals={false} />
-                <Bar dataKey="value" radius={[8, 8, 0, 0]} fill="#4F46E5" />
+                <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                  {awareSplit.map((entry) => (
+                    <Cell key={entry.name} fill={awareColors[entry.name]} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>

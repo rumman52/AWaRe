@@ -8,6 +8,7 @@ import { DashboardPanel } from "@/components/workspace/DashboardPanel";
 import { FloatingNav } from "@/components/workspace/FloatingNav";
 import { NewCasePanel } from "@/components/workspace/NewCasePanel";
 import { OverviewPanel } from "@/components/workspace/OverviewPanel";
+import { AwareBadge } from "@/components/ui/AwareBadge";
 
 type TabKey = "overview" | "newcase" | "dashboard" | "chat";
 
@@ -56,7 +57,15 @@ function WorkspacePage() {
             <div className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700">48–72h reassessment encouraged</div>
           </div>
 
-          <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">AWaRe groups</span>
+            <AwareBadge group="ACCESS" />
+            <AwareBadge group="WATCH" />
+            <AwareBadge group="RESERVE" />
+          </div>
+
+          <h2 className="mt-4 text-sm font-semibold uppercase tracking-wide text-slate-600">How it works</h2>
+          <div className="mt-2 grid gap-3 md:grid-cols-3">
             {[
               { icon: FileSearch, title: "Step 1", body: "Capture case details and infection context." },
               { icon: ShieldCheck, title: "Step 2", body: "Generate AWaRe-coded options with dose and duration." },
