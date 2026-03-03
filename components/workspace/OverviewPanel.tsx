@@ -5,11 +5,11 @@ import { Card } from "@/components/ui/Card";
 export function OverviewPanel({ onStartNewCase, onOpenChat }: { onStartNewCase: () => void; onOpenChat: () => void }) {
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-3">
-        <Button onClick={onStartNewCase}>
+      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
+        <Button className="w-full sm:w-auto" onClick={onStartNewCase}>
           Start New Case <ArrowRight className="h-4 w-4" />
         </Button>
-        <Button variant="secondary" onClick={onOpenChat}>
+        <Button className="w-full sm:w-auto" variant="secondary" onClick={onOpenChat}>
           <MessageCircle className="h-4 w-4" /> Open Chat
         </Button>
       </div>

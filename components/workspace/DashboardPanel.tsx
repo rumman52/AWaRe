@@ -42,7 +42,7 @@ export function DashboardPanel() {
   const watchPct = latest ? Math.round((latest.watchCount / Math.max(total, 1)) * 100) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="border-t-4 border-t-indigo-400"><p className="flex items-center gap-2 text-sm text-slate-600"><Activity className="h-4 w-4" />Total cases</p><p className="mt-2 text-3xl font-semibold">{total}</p></Card>
         <Card className="border-t-4 border-t-green-400"><p className="flex items-center gap-2 text-sm text-slate-600"><ShieldCheck className="h-4 w-4" />% Access</p><p className="mt-2 text-3xl font-semibold text-green-700">{accessPct}%</p></Card>
@@ -65,7 +65,7 @@ export function DashboardPanel() {
               <AwareBadge group="RESERVE" />
             </div>
           </div>
-          <div className="mt-4 h-[320px]">
+          <div className="mt-4 h-[240px] sm:h-[320px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={awareSplit}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
