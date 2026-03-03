@@ -36,6 +36,11 @@ export function OverviewPanel({ onStartNewCase, onOpenChat }: { onStartNewCase: 
           <p className="mt-2 text-sm text-slate-600">Case-specific options, dose and duration guidance, AWaRe pill badges, and a built-in 48–72h review cue to support de-escalation thinking.</p>
         </Card>
       </section>
+
+      <Card className="border-indigo-100 bg-indigo-50 p-4 text-center text-sm text-indigo-900">
+        <p className="font-semibold">Made by The AI Fixers</p>
+        <p className="mt-1 text-indigo-700">All rights reserved.</p>
+      </Card>
     </div>
   );
 }
