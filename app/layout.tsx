@@ -22,7 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </div>
         </header>
 
-        <div className="app-shell pt-6">
+        <div className="app-shell min-h-screen pb-10 pt-6">
           <div className="mb-4">
             <Disclaimer />
           </div>
